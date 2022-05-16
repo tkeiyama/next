@@ -1,5 +1,8 @@
 {
   "name": "@next/things",
   "version": "0.0.0",
-  "license": "MIT"
+  "license": "MIT",
+  "scripts": {
+    "dev": "ts-node-dev src/index.ts"
+  }
 }
