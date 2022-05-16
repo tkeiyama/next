@@ -1,0 +1,17 @@
+name: General Issue
+description: Open an issue for anything
+body:
+  - type: textarea
+    id: why
+    attributes:
+      label: Why
+      description: Why do you open this issue?
+    validations:
+      required: true
+  - type: textarea
+    id: what
+    attributes:
+      label: What
+      description: What are you gonna do?
+    validations:
+      required: true
