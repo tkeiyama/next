@@ -5,23 +5,29 @@ export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = {
   [K in keyof T]: T[K];
 };
-export type MakeOptional<T, K extends keyof T> = Omit<T, K> & {
-  [SubKey in K]?: Maybe<T[SubKey]>;
-};
-export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & {
-  [SubKey in K]: Maybe<T[SubKey]>;
-};
+export type MakeOptional<T, K extends keyof T> =
+  & Omit<T, K>
+  & {
+    [SubKey in K]?: Maybe<T[SubKey]>;
+  };
+export type MakeMaybe<T, K extends keyof T> =
+  & Omit<T, K>
+  & {
+    [SubKey in K]: Maybe<T[SubKey]>;
+  };
 export type ResolverFn<TResult, TParent, TContext, TArgs> = (
   parent: TParent,
   args: TArgs,
   context: TContext,
-  info: GraphQLResolveInfo
+  info: GraphQLResolveInfo,
 ) =>
   | Promise<import("mercurius-codegen").DeepPartial<TResult>>
   | import("mercurius-codegen").DeepPartial<TResult>;
-export type RequireFields<T, K extends keyof T> = Omit<T, K> & {
-  [P in K]-?: NonNullable<T[P]>;
-};
+export type RequireFields<T, K extends keyof T> =
+  & Omit<T, K>
+  & {
+    [P in K]-?: NonNullable<T[P]>;
+  };
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: string;
@@ -89,14 +95,14 @@ export type SubscriptionSubscribeFn<TResult, TParent, TContext, TArgs> = (
   parent: TParent,
   args: TArgs,
   context: TContext,
-  info: GraphQLResolveInfo
+  info: GraphQLResolveInfo,
 ) => AsyncIterable<TResult> | Promise<AsyncIterable<TResult>>;
 
 export type SubscriptionResolveFn<TResult, TParent, TContext, TArgs> = (
   parent: TParent,
   args: TArgs,
   context: TContext,
-  info: GraphQLResolveInfo
+  info: GraphQLResolveInfo,
 ) => TResult | Promise<TResult>;
 
 export interface SubscriptionSubscriberObject<
@@ -104,7 +110,7 @@ export interface SubscriptionSubscriberObject<
   TKey extends string,
   TParent,
   TContext,
-  TArgs
+  TArgs,
 > {
   subscribe: SubscriptionSubscribeFn<
     { [key in TKey]: TResult },
@@ -130,7 +136,7 @@ export type SubscriptionObject<
   TKey extends string,
   TParent,
   TContext,
-  TArgs
+  TArgs,
 > =
   | SubscriptionSubscriberObject<TResult, TKey, TParent, TContext, TArgs>
   | SubscriptionResolverObject<TResult, TParent, TContext, TArgs>;
@@ -140,23 +146,23 @@ export type SubscriptionResolver<
   TKey extends string,
   TParent = {},
   TContext = {},
-  TArgs = {}
+  TArgs = {},
 > =
   | ((
-      ...args: any[]
-    ) => SubscriptionObject<TResult, TKey, TParent, TContext, TArgs>)
+    ...args: any[]
+  ) => SubscriptionObject<TResult, TKey, TParent, TContext, TArgs>)
   | SubscriptionObject<TResult, TKey, TParent, TContext, TArgs>;
 
 export type TypeResolveFn<TTypes, TParent = {}, TContext = {}> = (
   parent: TParent,
   context: TContext,
-  info: GraphQLResolveInfo
+  info: GraphQLResolveInfo,
 ) => Maybe<TTypes> | Promise<Maybe<TTypes>>;
 
 export type IsTypeOfResolverFn<T = {}, TContext = {}> = (
   obj: T,
   context: TContext,
-  info: GraphQLResolveInfo
+  info: GraphQLResolveInfo,
 ) => boolean | Promise<boolean>;
 
 export type NextResolverFn<T> = () => Promise<T>;
@@ -165,13 +171,13 @@ export type DirectiveResolverFn<
   TResult = {},
   TParent = {},
   TContext = {},
-  TArgs = {}
+  TArgs = {},
 > = (
   next: NextResolverFn<TResult>,
   parent: TParent,
   args: TArgs,
   context: TContext,
-  info: GraphQLResolveInfo
+  info: GraphQLResolveInfo,
 ) => TResult | Promise<TResult>;
 
 /** Mapping between all available schema types and the resolvers types */
@@ -194,7 +200,7 @@ export type ResolversParentTypes = {
 
 export type ThingResolvers<
   ContextType = MercuriusContext,
-  ParentType extends ResolversParentTypes["Thing"] = ResolversParentTypes["Thing"]
+  ParentType extends ResolversParentTypes["Thing"] = ResolversParentTypes["Thing"],
 > = {
   id?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>;
   title?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>;
@@ -210,7 +216,7 @@ export type ThingResolvers<
 
 export type QueryResolvers<
   ContextType = MercuriusContext,
-  ParentType extends ResolversParentTypes["Query"] = ResolversParentTypes["Query"]
+  ParentType extends ResolversParentTypes["Query"] = ResolversParentTypes["Query"],
 > = {
   getThings?: Resolver<Array<ResolversTypes["Thing"]>, ParentType, ContextType>;
   getThingById?: Resolver<
@@ -223,7 +229,7 @@ export type QueryResolvers<
 
 export type MutationResolvers<
   ContextType = MercuriusContext,
-  ParentType extends ResolversParentTypes["Mutation"] = ResolversParentTypes["Mutation"]
+  ParentType extends ResolversParentTypes["Mutation"] = ResolversParentTypes["Mutation"],
 > = {
   createThing?: Resolver<
     ResolversTypes["Thing"],
@@ -258,20 +264,20 @@ export type Loader<TReturn, TObj, TParams, TContext> = (
   }>,
   context: TContext & {
     reply: import("fastify").FastifyReply;
-  }
+  },
 ) => Promise<Array<import("mercurius-codegen").DeepPartial<TReturn>>>;
 export type LoaderResolver<TReturn, TObj, TParams, TContext> =
   | Loader<TReturn, TObj, TParams, TContext>
   | {
-      loader: Loader<TReturn, TObj, TParams, TContext>;
-      opts?: {
-        cache?: boolean;
-      };
+    loader: Loader<TReturn, TObj, TParams, TContext>;
+    opts?: {
+      cache?: boolean;
     };
+  };
 export interface Loaders<
   TContext = import("mercurius").MercuriusContext & {
     reply: import("fastify").FastifyReply;
-  }
+  },
 > {
   Thing?: {
     id?: LoaderResolver<Maybe<Scalars["String"]>, Thing, {}, TContext>;
@@ -282,7 +288,6 @@ export interface Loaders<
   };
 }
 declare module "mercurius" {
-  interface IResolvers
-    extends Resolvers<import("mercurius").MercuriusContext> {}
+  interface IResolvers extends Resolvers<import("mercurius").MercuriusContext> {}
   interface MercuriusLoaders extends Loaders {}
 }
