@@ -7,7 +7,7 @@
   ],
   "scripts": {
     "lint": "run-p lint:*",
-    "lint:dprint": "dprint check --verbose",
+    "lint:dprint": "dprint check --verbose --incremental=false",
     "lint:type-check": "tsc --incremental false --noEmit",
     "fix": "run-p fix:*",
     "fix:dprint": "dprint fmt --verbose"
