@@ -7,6 +7,7 @@
   ],
   "scripts": {
     "lint:dprint": "dprint check --verbose",
+    "lint:type-check": "tsc --incremental false --noEmit",
     "fix:dprint": "dprint fmt --verbose"
   },
   "devDependencies": {
