@@ -5,8 +5,21 @@
   "workspaces": [
     "packages/*"
   ],
+  "scripts": {
+    "lint": "run-p lint:*",
+    "lint:dprint": "dprint check --verbose --incremental=false",
+    "lint:type-check": "tsc --incremental false --noEmit",
+    "fix": "run-p fix:*",
+    "fix:dprint": "dprint fmt --verbose",
+    "lint-staged": "lint-staged -c .lintstagedrc",
+    "prepare": "husky install"
+  },
   "devDependencies": {
+    "dprint": "^0.28.0",
+    "husky": "^8.0.1",
     "lerna": "^4.0.0",
+    "lint-staged": "^12.4.1",
+    "npm-run-all": "^4.1.5",
     "ts-node-dev": "^1.1.8",
     "typescript": "^4.6.4"
   }
