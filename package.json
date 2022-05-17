@@ -10,7 +10,8 @@
     "lint:dprint": "dprint check --verbose --incremental=false",
     "lint:type-check": "tsc --incremental false --noEmit",
     "fix": "run-p fix:*",
-    "fix:dprint": "dprint fmt --verbose"
+    "fix:dprint": "dprint fmt --verbose",
+    "prepare": "husky install"
   },
   "devDependencies": {
     "dprint": "^0.28.0",
