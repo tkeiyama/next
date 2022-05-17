@@ -4,5 +4,10 @@
   "license": "MIT",
   "scripts": {
     "dev": "ts-node-dev src/index.ts"
+  },
+  "dependencies": {
+    "fastify": "^3.29.0",
+    "mercurius": "^9.5.0",
+    "mercurius-codegen": "^3.3.1"
   }
 }
