@@ -6,6 +6,7 @@
     "packages/*"
   ],
   "devDependencies": {
+    "dprint": "^0.28.0",
     "lerna": "^4.0.0",
     "ts-node-dev": "^1.1.8",
     "typescript": "^4.6.4"
