@@ -5,6 +5,10 @@
   "workspaces": [
     "packages/*"
   ],
+  "scripts": {
+    "lint:dprint": "dprint check --verbose",
+    "fix:dprint": "dprint fmt --verbose"
+  },
   "devDependencies": {
     "dprint": "^0.28.0",
     "lerna": "^4.0.0",
