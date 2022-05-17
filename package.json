@@ -11,6 +11,7 @@
     "lint:type-check": "tsc --incremental false --noEmit",
     "fix": "run-p fix:*",
     "fix:dprint": "dprint fmt --verbose",
+    "lint-staged": "lint-staged -c .lintstagedrc",
     "prepare": "husky install"
   },
   "devDependencies": {
