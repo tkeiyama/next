@@ -50,11 +50,11 @@ export type Thing = {
 export type Query = {
   __typename?: "Query";
   getThings: Array<Thing>;
-  getThingById: Thing;
+  getThingById?: Maybe<Thing>;
 };
 
 export type QuerygetThingByIdArgs = {
-  id?: InputMaybe<Scalars["String"]>;
+  id: Scalars["String"];
 };
 
 export type Mutation = {
@@ -220,10 +220,10 @@ export type QueryResolvers<
 > = {
   getThings?: Resolver<Array<ResolversTypes["Thing"]>, ParentType, ContextType>;
   getThingById?: Resolver<
-    ResolversTypes["Thing"],
+    Maybe<ResolversTypes["Thing"]>,
     ParentType,
     ContextType,
-    Partial<QuerygetThingByIdArgs>
+    RequireFields<QuerygetThingByIdArgs, "id">
   >;
 };
 
