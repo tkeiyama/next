@@ -1,33 +1,12 @@
+import { PrismaClient } from "@prisma/client";
 import fastify from "fastify";
 import mercurius, { IResolvers } from "mercurius";
 import { codegenMercurius, gql } from "mercurius-codegen";
+import { v4 as uuidv4 } from "uuid";
 import { Thing } from "./graphql/generated";
 
 const app = fastify({ logger: true });
-
-let data: Thing[] = [
-  {
-    id: "1",
-    title: "One",
-    description: "foooo",
-    isDone: false,
-    until: "2022-12-31",
-  },
-  {
-    id: "2",
-    title: "Two",
-    description: "Bar",
-    isDone: true,
-    until: "2022-10-10",
-  },
-  {
-    id: "3",
-    title: "Three",
-    description: "Bazzzzzzzzz",
-    isDone: false,
-    until: "2022-08-01",
-  },
-];
+const prisma = new PrismaClient();
 
 const schema = gql`
   type Thing {
@@ -39,7 +18,7 @@ const schema = gql`
   }
   type Query {
     getThings: [Thing!]!
-    getThingById(id: String): Thing!
+    getThingById(id: String!): Thing
   }
 
   type Mutation {
@@ -51,45 +30,57 @@ const schema = gql`
 
 const resolvers: IResolvers = {
   Query: {
-    getThings: () => {
-      return data;
+    getThings: async (_, __, ctx) => {
+      return ctx.prisma.thing.findMany();
     },
-    getThingById: (_, { id }) => {
-      return data.filter((thing) => thing.id === id)[0];
+    getThingById: async (_, { id }, ctx) => {
+      return ctx.prisma.thing.findFirst({
+        where: {
+          id,
+        },
+      });
     },
   },
   Mutation: {
-    createThing: (_, { title, description, until }) => {
-      const thing: Thing = {
-        id: `${++data.length}`,
-        title: title,
+    createThing: async (_, { title, description, until }, ctx) => {
+      const data = {
+        id: uuidv4(),
+        title,
         description: description ?? "",
         isDone: false,
         until: until ?? "",
       };
-      data = [...data, thing];
-      return thing;
+      return ctx.prisma.thing.create({
+        data,
+      });
     },
-    updateThing: (_, { id, title, description, isDone, until }) => {
-      const numberId = Number(id);
-      const thing = {
+    updateThing: async (_, { id, title, description, isDone, until }, ctx) => {
+      const oldThing = await ctx.prisma.thing.findFirst({
+        where: {
+          id,
+        },
+      });
+
+      const newThing = {
         id,
-        title: data[numberId].title !== title && title !== undefined ? title : data[numberId].title,
-        description: data[numberId].description !== description && description !== undefined
-          ? description
-          : data[numberId].description,
-        isDone: data[numberId].isDone !== isDone && isDone !== undefined ? isDone : data[numberId].isDone,
-        until: data[numberId].until !== until && until !== undefined ? until : data[numberId].until,
+        title: title ?? oldThing?.title,
+        description: description ?? oldThing?.description,
+        isDone: isDone ?? oldThing?.isDone,
+        until: until ?? oldThing?.until,
       };
-      data[numberId] = thing;
-
-      return thing;
+      return ctx.prisma.thing.update({
+        where: {
+          id,
+        },
+        data: newThing,
+      });
     },
-    deleteThing: (_, { id }) => {
-      data = data.filter((thing) => thing.id !== id);
-      console.log(data);
-
-      return data[Number(id)];
+    deleteThing: async (_, { id }, ctx) => {
+      return ctx.prisma.thing.delete({
+        where: {
+          id,
+        },
+      });
     },
   },
 };
@@ -101,6 +92,9 @@ codegenMercurius(app, {
 app.register(mercurius, {
   schema,
   resolvers,
+  context(_, __) {
+    return { prisma };
+  },
   graphiql: true,
 });
 
