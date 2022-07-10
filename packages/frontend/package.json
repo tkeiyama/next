@@ -1,0 +1,8 @@
+{
+  "name": "@next/frontend",
+  "version": "0.0.0",
+  "license": "MIT",
+  "dependencies": {
+    "next": "^12.2.2"
+  }
+}
